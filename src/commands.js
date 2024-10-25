@@ -21,6 +21,11 @@ export const INVITE_COMMAND = {
   description: 'Get an invite link to add the bot to your server',
 };
 
+export const HELP_COMMAND = {
+  name: 'help',
+  description: 'Explains useful commands',
+};
+
 export const ROLL_COMMAND = {
   name: 'roll',
   description: 'Roll some dice',

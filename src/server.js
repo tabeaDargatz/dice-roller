@@ -4,7 +4,8 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import {INVITE_COMMAND, ROLL_COMMAND } from './commands.js';
+import {HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands.js';
+import { helpMessage } from './help.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './roll.js';
 
@@ -53,6 +54,10 @@ router.post('/', async (request, env) => {
         const msg = await roll(interaction);
         return constructJsonResponse(msg);
       }
+      case HELP_COMMAND.name.toLocaleLowerCase(): {
+        return constructJsonResponse(helpMessage);
+      }
+
       case INVITE_COMMAND.name.toLowerCase(): {
         const applicationId = env.DISCORD_APPLICATION_ID;
         const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
@@ -64,6 +69,7 @@ router.post('/', async (request, env) => {
           },
         });
       }
+
       default:
         return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
     }
