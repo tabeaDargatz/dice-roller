@@ -121,7 +121,6 @@ export async function roll(interaction){
     });
   }
   let rolls = rollDice(times, sides, skillBonus);
-  console.log("RAA");
   let message = generateMessage(playerName, skill, skillBonus, rolls, `${times}d${sides}`);
   if(sides === 20){
     //logStats(rolls, skill, id);
