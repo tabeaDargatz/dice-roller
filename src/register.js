@@ -1,4 +1,4 @@
-import {INVITE_COMMAND, ROLL_COMMAND } from './commands.js';
+import * as allCommands from './commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
 
@@ -21,6 +21,9 @@ if (!applicationId) {
   );
 }
 
+let commands = [];
+Object.getOwnPropertyNames(allCommands).forEach(commandName => commands.push(allCommands[commandName]));
+console.log(commands);
 /**
  * Register all commands globally.
  */
@@ -32,7 +35,7 @@ const response = await fetch(url, {
     Authorization: `Bot ${token}`,
   },
   method: 'PUT',
-  body: JSON.stringify([INVITE_COMMAND, ROLL_COMMAND]),
+  body: JSON.stringify(commands),
 });
 
 if (response.ok) {
