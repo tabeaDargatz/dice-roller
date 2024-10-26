@@ -4,10 +4,10 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import {HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands.js';
-import { helpMessage } from './help.js';
+import {HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
+import { helpMessage } from './commands/help.js';
 import { InteractionResponseFlags } from 'discord-interactions';
-import { roll } from './roll.js';
+import { roll } from './commands/roll.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {

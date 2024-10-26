@@ -1,4 +1,4 @@
-import * as allCommands from './commands.js';
+import * as allCommands from './commands/commands.js';
 import dotenv from 'dotenv';
 import process from 'node:process';
 
