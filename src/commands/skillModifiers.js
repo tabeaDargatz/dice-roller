@@ -3,7 +3,7 @@ export async function getSkillModifiers(interaction, env){
     let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?").bind(playerName).run();
     let skillModifierEntries = dbResult.results;
     if(skillModifierEntries.length === 0){
-        return "There are no skills registered for " + playerName +".";
+        return "There are no skills registered for " + playerName + ".";
     }
     let message = "**Showing all registered skills for " + playerName + ":** \n";
     skillModifierEntries.forEach(skillModifierEntry => {
@@ -35,12 +35,12 @@ export async function getSkillModifiers(interaction, env){
 
     let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
     let skillModifierEntries = dbResult.results;
-    let insertOrUpdate = "UPDATE";
-    if(dbResult.length === 0){
-        insertOrUpdate = "INSERT";
+    let result;
+    if(dbResult.results.length === 0){
+        result = await env.DB.prepare("INSERT INTO SkillModifiers(Modifier, PlayerName, Skill) VALUES (?1,?2,?3)").bind(modifier,playerName,skill).run();
+    } else {
+        result = await env.DB.prepare("UPDATE SkillModifiers SET Modifier = ?1 WHERE PlayerName = ?2 AND Skill = ?3").bind(modifier,playerName,skill).run();
     }
-    await env.DB.prepare(insertOrUpdate + " SkillModifiers SET Modifier = ?1 WHERE PlayerName = ?2 AND Skill = ?3").bind(modifier,playerName,skill).run();
-    
     return skill + " was successfully set to " + modifier + " for " + playerName;
   }
   

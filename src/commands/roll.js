@@ -100,10 +100,10 @@ function rollDice(times, sides, skillBonus) {
   return rolls;
 }
 
-export async function roll(interaction){
+export async function roll(interaction,env){
   //TODO: add db to make skillBonus and stats work
   const playerName = interaction.member.nick;
-  const skillBonus = 0;
+  let skillBonus = 0;
   let sides = 20;
   let times = 1;
   let skill = null;
@@ -120,6 +120,15 @@ export async function roll(interaction){
       }
     });
   }
+
+  if(skill){
+    let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
+    console.log(dbResult);
+    if(dbResult.results && dbResult.results.length > 0){
+      skillBonus = dbResult.results[0].Modifier;
+    }
+  }
+
   let rolls = rollDice(times, sides, skillBonus);
   let message = generateMessage(playerName, skill, skillBonus, rolls, `${times}d${sides}`);
   if(sides === 20){

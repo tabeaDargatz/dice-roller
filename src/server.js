@@ -52,7 +52,7 @@ router.post('/', async (request, env) => {
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     switch (interaction.data.name.toLowerCase()) {
       case ROLL_COMMAND.name.toLowerCase(): {
-        const msg = await roll(interaction);
+        const msg = await roll(interaction,env);
         return constructJsonResponse(msg);
       }
       case HELP_COMMAND.name.toLocaleLowerCase(): {
