@@ -36,6 +36,18 @@ export const SHOW_SKILLS_COMMAND = {
 export const ADD_SKILL_COMMAND = {
   name: 'addskill',
   description: 'Adds a skill with a modifier to your current character',
+  options: [{
+    name: "modifier",
+    type: 4,
+    description: "Adds bonus to skill"
+  },
+  {
+    name: "skill",
+    type: 3,
+    description: "Skill to add modifier to",
+    choices: getSkillList()
+  }
+]
 };
 
 export const DELETE_SKILL_COMMAND = {
