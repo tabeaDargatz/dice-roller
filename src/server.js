@@ -4,11 +4,11 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import {ADD_SKILL_COMMAND,SHOW_SKILLS_COMMAND,HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
+import {DELETE_SKILL_COMMAND,ADD_SKILL_COMMAND,SHOW_SKILLS_COMMAND,HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './commands/roll.js';
-import { getSkillModifiers,setSkillModifier } from './commands/skillModifiers.js';
+import { getSkillModifiers,setSkillModifier,deleteSkillModifier } from './commands/skillModifiers.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -64,6 +64,10 @@ router.post('/', async (request, env) => {
       }
       case ADD_SKILL_COMMAND.name.toLowerCase(): {
         const msg = await setSkillModifier(interaction,env);
+        return constructJsonResponse(msg);
+      }
+      case DELETE_SKILL_COMMAND.name.toLowerCase(): {
+        const msg = await deleteSkillModifier(interaction,env);
         return constructJsonResponse(msg);
       }
 

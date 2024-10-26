@@ -53,6 +53,14 @@ export const ADD_SKILL_COMMAND = {
 export const DELETE_SKILL_COMMAND = {
   name: 'deleteskill',
   description: 'Deletes a skill from your current character',
+  options: [
+  {
+    name: "skill",
+    type: 3,
+    description: "Skill to delete modifier for",
+    choices: getSkillList()
+  }
+]
 };
 
 // ----------DICE ROLLS----------

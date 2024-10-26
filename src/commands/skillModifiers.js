@@ -41,3 +41,28 @@ export async function getSkillModifiers(interaction, env){
     
     return skill + " was successfully set to " + modifier + " for " + playerName;
   }
+  
+  export async function deleteSkillModifier(interaction, env){
+    let playerName = interaction.member.nick;
+    let skill = null;
+    if(Object.hasOwn(interaction.data,"options")){
+        interaction.data.options.forEach(element => {
+          if(element.name === "skill"){
+            skill = element.value;
+          }
+        });
+    }
+    if(!skill){
+        return "Skill option is required.";
+    }
+
+    let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
+    let skillModifierEntries = dbResult.results;
+
+    if(dbResult.length === 0){
+        return "This skill has not been registered for " + playerName + " and therefor can not be deleted.";
+    }
+    await env.DB.prepare("DELETE FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
+    
+    return skill + " skill was successfully deleted for " + playerName;
+  }
