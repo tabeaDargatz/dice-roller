@@ -4,10 +4,11 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import {HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
+import {SHOW_SKILLS_COMMAND,HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './commands/roll.js';
+import { getSkillModifiers } from './commands/skillModifiers.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -56,6 +57,10 @@ router.post('/', async (request, env) => {
       }
       case HELP_COMMAND.name.toLocaleLowerCase(): {
         return constructJsonResponse(helpMessage);
+      }
+      case SHOW_SKILLS_COMMAND.name.toLocaleLowerCase(): {
+        const msg = await getSkillModifiers(interaction,env);
+        return constructJsonResponse(msg);
       }
 
       case INVITE_COMMAND.name.toLowerCase(): {

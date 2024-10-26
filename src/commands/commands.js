@@ -1,6 +1,4 @@
 /**
- * Share command metadata from a common spot to be used for both runtime
- * and registration.
  * 
  * option types:
  * SUB_COMMAND 1   
@@ -16,6 +14,9 @@
  * ATTACHMENT 11
  */
 
+import { getSkillList } from "./skillList.js";
+
+// ----------MISC----------
 export const INVITE_COMMAND = {
   name: 'invite',
   description: 'Get an invite link to add the bot to your server',
@@ -25,6 +26,24 @@ export const HELP_COMMAND = {
   name: 'help',
   description: 'Explains useful commands',
 };
+
+// ----------SKILLS----------
+export const SHOW_SKILLS_COMMAND = {
+  name: 'showskills',
+  description: 'Displays all registered skills for your current character',
+};
+
+export const ADD_SKILL_COMMAND = {
+  name: 'addskill',
+  description: 'Adds a skill with a modifier to your current character',
+};
+
+export const DELETE_SKILL_COMMAND = {
+  name: 'deleteskill',
+  description: 'Deletes a skill from your current character',
+};
+
+// ----------DICE ROLLS----------
 
 export const ROLL_COMMAND = {
   name: 'roll',
@@ -43,26 +62,7 @@ export const ROLL_COMMAND = {
     name: "skill",
     type: 3,
     description: "Adds bonuses from the skill.",
-    choices: [
-      { name: "Acrobatics", value: "acrobatics" },
-          { name: "Animal Handling", value: "animal handling" },
-          { name: "Arcana", value: "arcana" },
-          { name: "Athletics", value: "athletics" },
-          { name: "Deception", value: "deception" },
-          { name: "History", value: "history" },
-          { name: "Insight", value: "insight" },
-          { name: "Intimidation", value: "intimidation" },
-          { name: "Investigation", value: "investigation" },
-          { name: "Medicine", value: "medicine" },
-          { name: "Nature", value: "nature" },
-          { name: "Perception", value: "perception" },
-          { name: "Performance", value: "performance" },
-          { name: "Persuasion", value: "persuasion" },
-          { name: "Religion", value: "religion" },
-          { name: "Sleight of Hand", value: "sleight of hand" },
-          { name: "Stealth", value: "stealth" },
-          { name: "Survival", value: "survival" }
-    ]
+    choices: getSkillList()
   }
 ]
 };
