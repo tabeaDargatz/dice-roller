@@ -63,6 +63,11 @@ export const DELETE_SKILL_COMMAND = {
 ]
 };
 
+export const DELETE_ALL_SKILLS_COMMAND = {
+  name: 'deleteallskills',
+  description: 'Deletes all skills from your current character'
+};
+
 // ----------DICE ROLLS----------
 
 export const ROLL_COMMAND = {

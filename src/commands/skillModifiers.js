@@ -2,7 +2,9 @@ export async function getSkillModifiers(interaction, env){
     let playerName = interaction.member.nick;
     let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?").bind(playerName).run();
     let skillModifierEntries = dbResult.results;
-    
+    if(skillModifierEntries.length === 0){
+        return "There are no skills registered for " + playerName +".";
+    }
     let message = "**Showing all registered skills for " + playerName + ":** \n";
     skillModifierEntries.forEach(skillModifierEntry => {
         console.log(skillModifierEntry);
@@ -57,12 +59,24 @@ export async function getSkillModifiers(interaction, env){
     }
 
     let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
-    let skillModifierEntries = dbResult.results;
 
-    if(dbResult.length === 0){
+    if(dbResult.results.length === 0){
         return "This skill has not been registered for " + playerName + " and therefor can not be deleted.";
     }
     await env.DB.prepare("DELETE FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
     
     return skill + " skill was successfully deleted for " + playerName;
+  }
+
+  export async function deleteAllSkills(interaction, env){
+    let playerName = interaction.member.nick;
+
+    let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1").bind(playerName).run();
+    console.log(dbResult);
+    if(dbResult.results.length === 0){
+        return "There are no skills registered for " + playerName + " and therefor nothing was deleted.";
+    }
+    await env.DB.prepare("DELETE FROM SkillModifiers WHERE PlayerName = ?1").bind(playerName).run();
+    
+    return "Skills were successfully deleted for " + playerName;
   }
