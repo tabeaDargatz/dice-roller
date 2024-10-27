@@ -14,7 +14,6 @@ export async function getSkillModifiers(interaction, env){
     return message;
   }
 
-
   export async function setSkillModifier(interaction, env){
     let playerName = interaction.member.nick;
     let skill = null;
@@ -34,12 +33,10 @@ export async function getSkillModifiers(interaction, env){
     }
 
     let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
-    let skillModifierEntries = dbResult.results;
-    let result;
     if(dbResult.results.length === 0){
-        result = await env.DB.prepare("INSERT INTO SkillModifiers(Modifier, PlayerName, Skill) VALUES (?1,?2,?3)").bind(modifier,playerName,skill).run();
+        await env.DB.prepare("INSERT INTO SkillModifiers(Modifier, PlayerName, Skill) VALUES (?1,?2,?3)").bind(modifier,playerName,skill).run();
     } else {
-        result = await env.DB.prepare("UPDATE SkillModifiers SET Modifier = ?1 WHERE PlayerName = ?2 AND Skill = ?3").bind(modifier,playerName,skill).run();
+        await env.DB.prepare("UPDATE SkillModifiers SET Modifier = ?1 WHERE PlayerName = ?2 AND Skill = ?3").bind(modifier,playerName,skill).run();
     }
     return skill + " was successfully set to " + modifier + " for " + playerName;
   }

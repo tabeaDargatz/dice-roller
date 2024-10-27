@@ -4,10 +4,11 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import {DELETE_ALL_SKILLS_COMMAND,DELETE_SKILL_COMMAND,ADD_SKILL_COMMAND,SHOW_SKILLS_COMMAND,HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
+import {SHOW_STATS_COMMAND,RESET_ALL_STATS_COMMAND,DELETE_ALL_SKILLS_COMMAND,DELETE_SKILL_COMMAND,ADD_SKILL_COMMAND,SHOW_SKILLS_COMMAND,HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './commands/roll.js';
+import { deleteAllStats,getStats } from './commands/statistics.js';
 import { getSkillModifiers,setSkillModifier,deleteSkillModifier,deleteAllSkills } from './commands/skillModifiers.js';
 
 class JsonResponse extends Response {
@@ -51,13 +52,14 @@ router.post('/', async (request, env) => {
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     switch (interaction.data.name.toLowerCase()) {
+
+      //-----------ROLLS------------
       case ROLL_COMMAND.name.toLowerCase(): {
         const msg = await roll(interaction,env);
         return constructJsonResponse(msg);
       }
-      case HELP_COMMAND.name.toLocaleLowerCase(): {
-        return constructJsonResponse(helpMessage);
-      }
+
+      //-----------SKILLS------------
       case SHOW_SKILLS_COMMAND.name.toLocaleLowerCase(): {
         const msg = await getSkillModifiers(interaction,env);
         return constructJsonResponse(msg);
@@ -74,7 +76,21 @@ router.post('/', async (request, env) => {
         const msg = await deleteAllSkills(interaction,env);
         return constructJsonResponse(msg);
       }
+      
+      //-----------STATS------------
+      case RESET_ALL_STATS_COMMAND.name.toLowerCase(): {
+        const msg = await deleteAllStats(interaction,env);
+        return constructJsonResponse(msg);
+      }
+      case SHOW_STATS_COMMAND.name.toLowerCase(): {
+        const msg = await getStats(interaction,env);
+        return constructJsonResponse(msg);
+      }
 
+      //-----------MISC------------
+      case HELP_COMMAND.name.toLocaleLowerCase(): {
+        return constructJsonResponse(helpMessage);
+      }
       case INVITE_COMMAND.name.toLowerCase(): {
         const applicationId = env.DISCORD_APPLICATION_ID;
         const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;

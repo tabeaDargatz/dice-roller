@@ -68,6 +68,17 @@ export const DELETE_ALL_SKILLS_COMMAND = {
   description: 'Deletes all skills from your current character'
 };
 
+// ----------STATISTICS----------
+export const SHOW_STATS_COMMAND = {
+  name: 'stats',
+  description: 'Reset all statistics for your character'
+};
+
+export const RESET_ALL_STATS_COMMAND = {
+  name: 'reset',
+  description: 'Reset all statistics for your character'
+};
+
 // ----------DICE ROLLS----------
 
 export const ROLL_COMMAND = {

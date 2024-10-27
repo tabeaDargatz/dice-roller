@@ -2,6 +2,17 @@ const defaultRowLength = 34; //34 whitespace characters needed to fill the row b
 const chunkSize = 4; // Number of values per row
 const defaultSumRowLength = 7;
 const defaultRollRowLength = defaultRowLength - defaultSumRowLength - 1;
+const measurementNat20 = "Nat20s";
+const measurementCritFail = "CritFails";
+
+class Rolls {
+  constructor(rolls, nat20, critFails) {
+    this.rolls = rolls;
+    this.nat20 = nat20;
+    this.critFails = critFails;
+  }
+
+}
 
 function generateMessage(playerName, skill, skillBonus, rollValues, diceType) {
   let message = "";
@@ -86,18 +97,23 @@ function createSumSubrow(sum, index, chunkLength) {
 
 function rollDice(times, sides, skillBonus) {
   let rolls = [];
+  let nat20 = 0;
+  let critFail = 0;
 
   for (let i = 0; i < times; i++) {
     let roll = Math.floor(Math.random() * sides) + 1;
-
     if (roll === 1) {
+      console.log("CritFail");
+      critFail++;
     } else if (roll === 20) {
+      console.log("Nat20");
+      nat20++;
     } else {
       roll += skillBonus;
     }
     rolls.push(roll);
   }
-  return rolls;
+  return new Rolls(rolls,nat20,critFail);
 }
 
 export async function roll(interaction,env){
@@ -123,40 +139,53 @@ export async function roll(interaction,env){
 
   if(skill){
     let dbResult = await env.DB.prepare("SELECT * FROM SkillModifiers WHERE PlayerName = ?1 AND Skill = ?2").bind(playerName,skill).run();
-    console.log(dbResult);
     if(dbResult.results && dbResult.results.length > 0){
       skillBonus = dbResult.results[0].Modifier;
     }
   }
 
-  let rolls = rollDice(times, sides, skillBonus);
-  let message = generateMessage(playerName, skill, skillBonus, rolls, `${times}d${sides}`);
+  let rollDetails = rollDice(times, sides, skillBonus);
+  let message = generateMessage(playerName, skill, skillBonus, rollDetails.rolls, `${times}d${sides}`);
   if(sides === 20){
-    //logStats(rolls, skill, id);
+    logStats(rollDetails, skill, playerName,env);
   }
-
   return message;
 }
 
-/*
-async function logStats(rolls, skill,id){
-  const nat20Counter = rolls.filter((roll) => roll == 20).length;
-  if(nat20Counter > 0){
-    const nat20 = (await db.get(id + "nat20")).value ?? 0;
-    await db.set(id + "nat20", nat20+nat20Counter);
+async function logStats(rollDetails, skill,playerName,env){
+  if(rollDetails.nat20 > 0){
+    console.log("logging nat20:" + rollDetails.nat20);
+    logStat(rollDetails.nat20,playerName,measurementNat20,env);
   }
   
-  const critFailCounter = rolls.filter((roll) => roll == 1).length;
-  if(critFailCounter > 0){
-    const critFail = (await db.get(id + "critFail")).value ?? 0;
-    await db.set(id + "critFail", critFail+critFailCounter);
+  if(rollDetails.critFails > 0){
+    console.log("logging critFailCounter:" + rollDetails.critFails);
+    logStat(rollDetails.critFails,playerName,measurementCritFail,env);
   }
   
   if(skill){
-    let skillUsed = (await db.get(id + "used" + skill)).value ?? 0;
-    skillUsed += rolls.length;
-    await db.set(id + "used" + skill, skillUsed);
+    console.log("logging skill:" + skill);
+    logStat(rollDetails.rolls.length,playerName,skill,env);
   }
 }
-*/
 
+async function logStat(value, playerName,measurement,env){
+  let dbResult = await env.DB.prepare("SELECT * FROM Statistic WHERE PlayerName = ?1 AND Measurement = ?2").bind(playerName,measurement).run();
+  console.log(dbResult.results);
+  if(dbResult.results.length === 0){
+    try {
+      await env.DB.prepare("INSERT INTO Statistic(Count, PlayerName, Measurement) VALUES (?1,?2,?3)").bind(value,playerName,measurement).run();
+    } catch (error) {
+      console.log(error);
+    }
+    
+  } else {
+    try {
+      let newValue = value + dbResult.results[0].count;
+    await env.DB.prepare("UPDATE Statistic SET Count = ?1 WHERE PlayerName = ?2 AND Measurement = ?3").bind(newValue,playerName,measurement).run();
+    } catch (error) {
+      console.log(error);
+    }
+    
+  }
+}
