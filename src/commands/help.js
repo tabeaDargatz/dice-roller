@@ -2,8 +2,9 @@ export const helpMessage = `
 
 **CHARACTER SETUP**
 You can register skills for your character so that the modifiers are automatically added to your rolls.
-      /register          registers a skill modifier for your character
-      /unregister    deletes the skill modifier for your character
+      /addskill          registers a skill modifier for your character
+      /deleteskill    deletes the skill modifier for your character
+      /deleteallskills  deletes all skill modifiers for your character
       /skills              shows all registered skill modifiers for your character
 
 **ROLLING DICE**
