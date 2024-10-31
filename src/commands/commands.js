@@ -1,20 +1,20 @@
 /**
- * 
+ *
  * option types:
- * SUB_COMMAND 1   
- * SUB_COMMAND_GROUP 2 
- * STRING 3    
+ * SUB_COMMAND 1
+ * SUB_COMMAND_GROUP 2
+ * STRING 3
  * INTEGER 4
- * BOOLEAN 5   
- * USER 6  
+ * BOOLEAN 5
+ * USER 6
  * CHANNEL 7
- * ROLE 8  
+ * ROLE 8
  * MENTIONABLE 9
  * NUMBER 10
  * ATTACHMENT 11
  */
 
-import { getSkillList } from "./skillList.js";
+import { getSkillList } from '../utils/skillList.js';
 
 // ----------MISC----------
 export const INVITE_COMMAND = {
@@ -27,6 +27,11 @@ export const HELP_COMMAND = {
   description: 'Explains useful commands',
 };
 
+export const TEST_COMMAND = {
+  name: 'test',
+  description: 'Test',
+};
+
 // ----------SKILLS----------
 export const SHOW_SKILLS_COMMAND = {
   name: 'showskills',
@@ -36,47 +41,48 @@ export const SHOW_SKILLS_COMMAND = {
 export const ADD_SKILL_COMMAND = {
   name: 'addskill',
   description: 'Adds a skill with a modifier to your current character',
-  options: [{
-    name: "modifier",
-    type: 4,
-    description: "Adds bonus to skill"
-  },
-  {
-    name: "skill",
-    type: 3,
-    description: "Skill to add modifier to",
-    choices: getSkillList()
-  }
-]
+  options: [
+    {
+      name: 'modifier',
+      type: 4,
+      description: 'Adds bonus to skill',
+    },
+    {
+      name: 'skill',
+      type: 3,
+      description: 'Skill to add modifier to',
+      choices: getSkillList(),
+    },
+  ],
 };
 
 export const DELETE_SKILL_COMMAND = {
   name: 'deleteskill',
   description: 'Deletes a skill from your current character',
   options: [
-  {
-    name: "skill",
-    type: 3,
-    description: "Skill to delete modifier for",
-    choices: getSkillList()
-  }
-]
+    {
+      name: 'skill',
+      type: 3,
+      description: 'Skill to delete modifier for',
+      choices: getSkillList(),
+    },
+  ],
 };
 
 export const DELETE_ALL_SKILLS_COMMAND = {
   name: 'deleteallskills',
-  description: 'Deletes all skills from your current character'
+  description: 'Deletes all skills from your current character',
 };
 
 // ----------STATISTICS----------
 export const SHOW_STATS_COMMAND = {
   name: 'stats',
-  description: 'Reset all statistics for your character'
+  description: 'Reset all statistics for your character',
 };
 
 export const RESET_ALL_STATS_COMMAND = {
   name: 'reset',
-  description: 'Reset all statistics for your character'
+  description: 'Reset all statistics for your character',
 };
 
 // ----------DICE ROLLS----------
@@ -84,21 +90,22 @@ export const RESET_ALL_STATS_COMMAND = {
 export const ROLL_COMMAND = {
   name: 'roll',
   description: 'Roll some dice',
-  options: [{
-    name: "sides",
-    type: 4,
-    description: "Specific number of sides on the die"
-  },
-  {
-    name: "times",
-    type: 4,
-    description: "Specifies the number of times the die should be rolled."
-  },
-  {
-    name: "skill",
-    type: 3,
-    description: "Adds bonuses from the skill.",
-    choices: getSkillList()
-  }
-]
+  options: [
+    {
+      name: 'sides',
+      type: 4,
+      description: 'Specific number of sides on the die',
+    },
+    {
+      name: 'times',
+      type: 4,
+      description: 'Specifies the number of times the die should be rolled.',
+    },
+    {
+      name: 'skill',
+      type: 3,
+      description: 'Adds bonuses from the skill.',
+      choices: getSkillList(),
+    },
+  ],
 };

@@ -4,13 +4,29 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import {SHOW_STATS_COMMAND,RESET_ALL_STATS_COMMAND,DELETE_ALL_SKILLS_COMMAND,DELETE_SKILL_COMMAND,ADD_SKILL_COMMAND,SHOW_SKILLS_COMMAND,HELP_COMMAND, INVITE_COMMAND, ROLL_COMMAND } from './commands/commands.js';
+import {
+  TEST_COMMAND,
+  SHOW_STATS_COMMAND,
+  RESET_ALL_STATS_COMMAND,
+  DELETE_ALL_SKILLS_COMMAND,
+  DELETE_SKILL_COMMAND,
+  ADD_SKILL_COMMAND,
+  SHOW_SKILLS_COMMAND,
+  HELP_COMMAND,
+  INVITE_COMMAND,
+  ROLL_COMMAND,
+} from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
+import { EmbedBuilder } from './utils/EmbedBuilder.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './commands/roll.js';
-import { deleteAllStats,getStats } from './commands/statistics.js';
-import { getSkillModifiers,setSkillModifier,deleteSkillModifier,deleteAllSkills } from './commands/skillModifiers.js';
-
+import { deleteAllStats, getStats } from './commands/statistics.js';
+import {
+  getSkillModifiers,
+  setSkillModifier,
+  deleteSkillModifier,
+  deleteAllSkills,
+} from './commands/skillModifiers.js';
 class JsonResponse extends Response {
   constructor(body, init) {
     const jsonBody = JSON.stringify(body);
@@ -52,44 +68,47 @@ router.post('/', async (request, env) => {
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     switch (interaction.data.name.toLowerCase()) {
-
       //-----------ROLLS------------
       case ROLL_COMMAND.name.toLowerCase(): {
-        const msg = await roll(interaction,env);
-        return constructJsonResponse(msg);
+        const msg = await roll(interaction, env);
+        return constructEmbedJsonResponse(msg);
       }
 
       //-----------SKILLS------------
       case SHOW_SKILLS_COMMAND.name.toLocaleLowerCase(): {
-        const msg = await getSkillModifiers(interaction,env);
+        const msg = await getSkillModifiers(interaction, env);
         return constructJsonResponse(msg);
       }
       case ADD_SKILL_COMMAND.name.toLowerCase(): {
-        const msg = await setSkillModifier(interaction,env);
+        const msg = await setSkillModifier(interaction, env);
         return constructJsonResponse(msg);
       }
       case DELETE_SKILL_COMMAND.name.toLowerCase(): {
-        const msg = await deleteSkillModifier(interaction,env);
+        const msg = await deleteSkillModifier(interaction, env);
         return constructJsonResponse(msg);
       }
       case DELETE_ALL_SKILLS_COMMAND.name.toLowerCase(): {
-        const msg = await deleteAllSkills(interaction,env);
+        const msg = await deleteAllSkills(interaction, env);
         return constructJsonResponse(msg);
       }
-      
+
       //-----------STATS------------
       case RESET_ALL_STATS_COMMAND.name.toLowerCase(): {
-        const msg = await deleteAllStats(interaction,env);
+        const msg = await deleteAllStats(interaction, env);
         return constructJsonResponse(msg);
       }
       case SHOW_STATS_COMMAND.name.toLowerCase(): {
-        const msg = await getStats(interaction,env);
+        const msg = await getStats(interaction, env);
         return constructJsonResponse(msg);
       }
 
       //-----------MISC------------
       case HELP_COMMAND.name.toLocaleLowerCase(): {
-        return constructJsonResponse(helpMessage);
+        const msg = constructJsonResponse(helpMessage);
+        return msg;
+      }
+      case TEST_COMMAND.name.toLocaleLowerCase(): {
+        return constructEmbedJsonResponse(constructEmbed(interaction));
       }
       case INVITE_COMMAND.name.toLowerCase(): {
         const applicationId = env.DISCORD_APPLICATION_ID;
@@ -113,11 +132,20 @@ router.post('/', async (request, env) => {
 });
 router.all('*', () => new Response('Not Found.', { status: 404 }));
 
-function constructJsonResponse(msg){
+function constructJsonResponse(msg) {
   return new JsonResponse({
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       content: msg,
+    },
+  });
+}
+
+function constructEmbedJsonResponse(embed) {
+  return new JsonResponse({
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      embeds: [embed],
     },
   });
 }

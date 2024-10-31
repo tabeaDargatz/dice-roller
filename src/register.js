@@ -22,7 +22,9 @@ if (!applicationId) {
 }
 
 let commands = [];
-Object.getOwnPropertyNames(allCommands).forEach(commandName => commands.push(allCommands[commandName]));
+Object.getOwnPropertyNames(allCommands).forEach((commandName) =>
+  commands.push(allCommands[commandName]),
+);
 console.log(commands);
 /**
  * Register all commands globally.
