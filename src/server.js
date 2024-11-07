@@ -41,7 +41,12 @@ class JsonResponse extends Response {
 
 const router = AutoRouter();
 router.get('/', (request, env) => {
-  return new Response(`Worker is up and running.`);
+  return new Response(`Worker is up and running.`, {
+    //TODO: change to dnd website address once its setup
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
 });
 
 /**
