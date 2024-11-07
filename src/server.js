@@ -17,7 +17,7 @@ import {
   ROLL_COMMAND,
 } from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
-import { EmbedBuilder } from './utils/EmbedBuilder.js';
+import { getDetails } from './api/characterDetails.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './commands/roll.js';
 import { deleteAllStats, getStats } from './commands/statistics.js';
@@ -41,7 +41,12 @@ class JsonResponse extends Response {
 
 const router = AutoRouter();
 router.get('/', (request, env) => {
-  return new Response(`Worker is up and running.`, {
+  return new Response(`Worker is up and running.`);
+});
+
+router.get('/api/Cara', async (request, env) => {
+  const details = await getDetails('Cara', env);
+  return new JsonResponse(details, {
     //TODO: change to dnd website address once its setup
     headers: {
       'Access-Control-Allow-Origin': '*',
