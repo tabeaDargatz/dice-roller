@@ -4,9 +4,7 @@ CREATE TABLE IF NOT EXISTS CharacterDetails (PlayerName TEXT, Age INTEGER, Gende
 Backstory TEXT, Personality TEXT, Strength INTEGER, Dexterity INTEGER, Constitution INTEGER, Intelligence INTEGER, Wisdom INTEGER, Charisma INTEGER, Hp INTEGER, Ac INTEGER, 
 Speed INTEGER, InitiativeBonus INTEGER, SpellAtkBonus INTEGER, SpellMod INTEGER, ClassFeatures TEXT, SpeciesTraits TEXT, Actions TEXT, BonusActions TEXT, Level INTEGER, 
 Class TEXT, Race TEXT,  PRIMARY KEY (PlayerName));
-
-INSERT INTO CharacterDetails (PlayerName, Age, Gender, Height, Weight, Hair, Eyes, Skin, Alignment, Faith, Backstory, Personality, Strength, Dexterity, Constitution, 
-Intelligence, Wisdom, Charisma, Hp, Ac, Speed, InitiativeBonus, SpellAtkBonus, SpellMod, ClassFeatures, SpeciesTraits, Actions, BonusActions, Level, Class, Race)
-VALUES ('Cara', 20, 'Female', '160cm', '55kg', 'long, brown', 'green', 'pale', 'chaotic good','none','She is a cool bean', 'Awesome personality', 11,15,16,10,10,18,
-19,13,30,2,4,4,'Bardic Inspiration blabla', 'humans get heroic inspiration after long rest',
-'Attack,Dash,Disengage,Dodge,Grapple,Help,Hide,Improvise,Influence,Magic,Ready,Search,Shove,Study,Utilize','Can give bardic inspiration',2,'Bard','Human');
+CREATE TABLE IF NOT EXISTS Languages (PlayerName TEXT, Language TEXT, PRIMARY KEY (PlayerName, Language));
+CREATE TABLE IF NOT EXISTS Tools (PlayerName TEXT, Tool TEXT, PRIMARY KEY (PlayerName, Tool));
+CREATE TABLE IF NOT EXISTS Proficiencies (PlayerName TEXT, Proficiency TEXT, PRIMARY KEY (PlayerName, Proficiency));
+CREATE TABLE IF NOT EXISTS InventoryItems (PlayerName TEXT, Item TEXT, PRIMARY KEY (PlayerName, Item));

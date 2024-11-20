@@ -44,8 +44,8 @@ router.get('/', (request, env) => {
   return new Response(`Worker is up and running.`);
 });
 
-router.get('/api/Cara', async (request, env) => {
-  const details = await getDetails('Cara', env);
+router.get('/api/characters', async (request, env) => {
+  const details = await getDetails(request.query.name, env);
   return new JsonResponse(details, {
     //TODO: change to dnd website address once its setup
     headers: {
