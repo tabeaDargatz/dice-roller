@@ -1,3 +1,5 @@
+import { getThumbnail } from '../utils/CharProfilePics.js';
+
 export async function getDetails(characterName, env) {
   let characterDetails = await env.DB.prepare(
     'SELECT * FROM CharacterDetails WHERE PlayerName = ?1',
@@ -13,7 +15,7 @@ export async function getDetails(characterName, env) {
   );
   characterDetails['Skills'] = await getSkills(characterName, env);
   characterDetails['Inventory'] = await getInventory(characterName, env);
-
+  characterDetails['PictureUrl'] = getThumbnail(characterName);
   return characterDetails;
 }
 
