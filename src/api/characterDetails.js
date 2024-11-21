@@ -13,10 +13,25 @@ export async function getDetails(characterName, env) {
     characterName,
     env,
   );
+  characterDetails['Spells'] = await getSpells(characterName, env);
   characterDetails['Skills'] = await getSkills(characterName, env);
   characterDetails['Inventory'] = await getInventory(characterName, env);
   characterDetails['PictureUrl'] = getThumbnail(characterName);
   return characterDetails;
+}
+
+async function getSpells(characterName, env) {
+  let spellsResult = await env.DB.prepare(
+    'SELECT * FROM Spells WHERE PlayerName = ?1',
+  )
+    .bind(characterName)
+    .run();
+
+  spellsResult.results.forEach((element) => {
+    delete element['PlayerName'];
+  });
+
+  return spellsResult.results;
 }
 
 async function getInventory(characterName, env) {
