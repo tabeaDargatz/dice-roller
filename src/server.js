@@ -46,17 +46,6 @@ router.get('/', (request, env) => {
   return new Response(`Worker is up and running.`);
 });
 
-router.options(
-  '*',
-  () =>
-    new Response('', {
-      //TODO: change to dnd website address once its setup
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    }),
-);
-
 router.get('/api/characters', async (request, env) => {
   const details = await getDetails(request.query.name, env);
   return new JsonResponse(details, {
@@ -86,6 +75,7 @@ router.put('/api/edit', async (request, env) => {
     //TODO: change to dnd website address once its setup
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS, PUT',
     },
   });
 });
