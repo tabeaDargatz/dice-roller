@@ -9,3 +9,4 @@ CREATE TABLE IF NOT EXISTS Tools (PlayerName TEXT, Tool TEXT, PRIMARY KEY (Playe
 CREATE TABLE IF NOT EXISTS Proficiencies (PlayerName TEXT, Proficiency TEXT, PRIMARY KEY (PlayerName, Proficiency));
 CREATE TABLE IF NOT EXISTS InventoryItems (PlayerName TEXT, Item TEXT, PRIMARY KEY (PlayerName, Item));
 CREATE TABLE IF NOT EXISTS Spells (PlayerName TEXT, Level TEXT, Slots INTEGER, Spells TEXT, PRIMARY KEY (PlayerName, Level));
+CREATE TABLE IF NOT EXISTS Campaigns (Name TEXT,PRIMARY KEY (Name));

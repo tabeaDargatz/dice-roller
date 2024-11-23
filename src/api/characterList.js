@@ -14,19 +14,33 @@ class Character {
   }
 }
 
-//TODO: change to return info from DB instead
 export async function getList(env) {
-  let campaigns = [];
+  let campaignNames = await env.DB.prepare('SELECT Name FROM Campaigns').run();
+  let list = [];
+
+  for (const campaignName of campaignNames.results) {
+    let campaign = await createCampaign(campaignName.Name, env);
+    list.push(campaign);
+  }
+
+  console.log(list);
+  return list;
+}
+
+async function createCampaign(campaignName, env) {
   let characters = [];
-  let ruut = new Character('Ruut', getThumbnail('Ruut'));
-  let xulle = new Character('Xulle', getThumbnail('Xulle'));
-  let cara = new Character('Cara', getThumbnail('Cara'));
-  characters.push(ruut);
-  characters.push(xulle);
-  characters.push(cara);
+  let characterNames = await env.DB.prepare(
+    'SELECT PlayerName FROM CharacterDetails WHERE Campaign = ?1',
+  )
+    .bind(campaignName)
+    .run();
 
-  let campaign = new Campaign('Gods of Corrupt Fate', characters);
-  campaigns.push(campaign);
-
-  return campaigns;
+  characterNames.results.forEach((characterName) => {
+    let character = new Character(
+      characterName.PlayerName,
+      getThumbnail(characterName.PlayerName),
+    );
+    characters.push(character);
+  });
+  return new Campaign(campaignName, characters);
 }
