@@ -17,6 +17,7 @@ import {
   ROLL_COMMAND,
 } from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
+import { saveEdit } from './api/characterEdit.js';
 import { getDetails } from './api/characterDetails.js';
 import { getList } from './api/characterList.js';
 import { InteractionResponseFlags } from 'discord-interactions';
@@ -57,6 +58,19 @@ router.get('/api/characters', async (request, env) => {
 
 router.get('/api/campaigns', async (request, env) => {
   const details = await getList(env);
+  return new JsonResponse(details, {
+    //TODO: change to dnd website address once its setup
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+});
+
+router.put('/api/edit', async (request, env) => {
+  const newResObj = new Response(request.body);
+  const body = await newResObj.json();
+
+  const details = await saveEdit(body, request.query.name, env);
   return new JsonResponse(details, {
     //TODO: change to dnd website address once its setup
     headers: {
