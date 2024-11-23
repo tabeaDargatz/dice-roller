@@ -8,8 +8,4 @@ CREATE TABLE IF NOT EXISTS Languages (PlayerName TEXT, Language TEXT, PRIMARY KE
 CREATE TABLE IF NOT EXISTS Tools (PlayerName TEXT, Tool TEXT, PRIMARY KEY (PlayerName, Tool));
 CREATE TABLE IF NOT EXISTS Proficiencies (PlayerName TEXT, Proficiency TEXT, PRIMARY KEY (PlayerName, Proficiency));
 CREATE TABLE IF NOT EXISTS InventoryItems (PlayerName TEXT, Item TEXT, PRIMARY KEY (PlayerName, Item));
-
 CREATE TABLE IF NOT EXISTS Spells (PlayerName TEXT, Level TEXT, Slots INTEGER, Spells TEXT, PRIMARY KEY (PlayerName, Level));
-
-INSERT INTO Spells
-VALUES ("Cara", "Cantrips",0,"Guidance, Light, Mending, Message"), ("Cara", "First",3,"Guidance, Light, Mending, Message");

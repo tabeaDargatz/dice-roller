@@ -18,6 +18,7 @@ import {
 } from './commands/commands.js';
 import { helpMessage } from './commands/help.js';
 import { getDetails } from './api/characterDetails.js';
+import { getList } from './api/characterList.js';
 import { InteractionResponseFlags } from 'discord-interactions';
 import { roll } from './commands/roll.js';
 import { deleteAllStats, getStats } from './commands/statistics.js';
@@ -46,6 +47,16 @@ router.get('/', (request, env) => {
 
 router.get('/api/characters', async (request, env) => {
   const details = await getDetails(request.query.name, env);
+  return new JsonResponse(details, {
+    //TODO: change to dnd website address once its setup
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+});
+
+router.get('/api/campaigns', async (request, env) => {
+  const details = await getList(env);
   return new JsonResponse(details, {
     //TODO: change to dnd website address once its setup
     headers: {
