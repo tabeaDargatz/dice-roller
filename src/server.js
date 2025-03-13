@@ -82,7 +82,8 @@ router.put('/api/edit', async (request, env) => {
   const newResObj = new Response(request.body);
   const body = await newResObj.json();
 
-  const details = await saveEdit(body, request.query.name, env);
+  await saveEdit(body, request.query.name, env);
+  const details = await getDetails(request.query.name, env);
   return new JsonResponse(details, {
     //TODO: change to dnd website address once its setup
     headers: {
