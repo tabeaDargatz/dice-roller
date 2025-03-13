@@ -87,7 +87,6 @@ router.put('/api/edit', async (request, env) => {
     //TODO: change to dnd website address once its setup
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS, PUT',
     },
   });
 });
