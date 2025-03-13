@@ -8,6 +8,8 @@ export function getThumbnail(characterName) {
       return 'https://i.imgur.com/x2dioxD.png';
     case 'Ainikki':
       return 'https://imgur.com/z8tZMJb.png';
+    case 'Tinki':
+      return 'https://imgur.com/haWgqRq.png';
     case 'The Almighty DnD God (DM)':
       return 'https://i.imgur.com/4y4N3Xh.png';
     default:
