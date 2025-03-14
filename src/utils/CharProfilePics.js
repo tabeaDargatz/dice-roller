@@ -12,6 +12,8 @@ export function getThumbnail(characterName) {
       return 'https://imgur.com/haWgqRq.png';
     case 'The Almighty DnD God (DM)':
       return 'https://i.imgur.com/4y4N3Xh.png';
+    case 'Eulades Starhunt':
+      return 'https://imgur.com/bbK8ElJ.png';
     default:
       return 'https://i.imgur.com/2mmvP7y.png';
   }
