@@ -16,6 +16,7 @@ import {
   INVITE_COMMAND,
   ROLL_COMMAND,
 } from './commands/commands.js';
+import { createChar } from './api/characterCreation.js';
 import { helpMessage } from './commands/help.js';
 import { saveEdit } from './api/characterEdit.js';
 import { getDetails } from './api/characterDetails.js';
@@ -89,6 +90,19 @@ router.put('/api/edit', async (request, env) => {
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
+  });
+});
+
+router.post('/api/create', async (request, env) => {
+  const newResObj = new Response(request.body);
+  const body = await newResObj.json();
+
+  await createChar(body, env);
+  return new JsonResponse(null, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    status: 201,
   });
 });
 

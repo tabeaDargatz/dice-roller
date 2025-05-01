@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS SkillModifiers (PlayerName TEXT, Skill TEXT, Modifier
 CREATE TABLE IF NOT EXISTS CharacterDetails (PlayerName TEXT, Age INTEGER, Gender TEXT, Height TEXT, Weight TEXT, Hair TEXT, Eyes TEXT, Skin TEXT, Alignment TEXT, Faith TEXT,
 Backstory TEXT, Personality TEXT, Strength INTEGER, Dexterity INTEGER, Constitution INTEGER, Intelligence INTEGER, Wisdom INTEGER, Charisma INTEGER, Hp INTEGER, Ac INTEGER, 
 Speed INTEGER, InitiativeBonus INTEGER, SpellAtkBonus INTEGER, SpellMod INTEGER, ClassFeatures TEXT, SpeciesTraits TEXT, Actions TEXT, BonusActions TEXT, Level INTEGER, 
-Class TEXT, Race TEXT,  PRIMARY KEY (PlayerName));
+Class TEXT, Race TEXT, Campaign TEXT,  PRIMARY KEY (PlayerName));
 CREATE TABLE IF NOT EXISTS Languages (PlayerName TEXT, Language TEXT, PRIMARY KEY (PlayerName, Language));
 CREATE TABLE IF NOT EXISTS Tools (PlayerName TEXT, Tool TEXT, PRIMARY KEY (PlayerName, Tool));
 CREATE TABLE IF NOT EXISTS Proficiencies (PlayerName TEXT, Proficiency TEXT, PRIMARY KEY (PlayerName, Proficiency));
