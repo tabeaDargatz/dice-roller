@@ -9,30 +9,29 @@ export async function saveEdit(updates, characterName, env) {
 }
 
 async function saveUpdateForCharacterDetails(updates, env, characterName) {
-  let statement = 'UPDATE CharacterDetails SET ';
-  Object.keys(updates).forEach(function (key, index) {
-    statement += key.toLowerCase() + ' = "' + updates[key] + '", ';
-  });
+  const keys = Object.keys(updates);
+  const columns = keys.map((key) => `${key.toLowerCase()} = ?`).join(', ');
+  const values = keys.map((key) => updates[key]);
 
-  //Delete last two characters from statement string, as there is an extra ", " at the end
-  statement = statement.substring(0, statement.length - 2);
+  const statement = `UPDATE CharacterDetails SET ${columns} WHERE PlayerName = ?`;
+  values.push(characterName);
 
-  statement += ' WHERE PlayerName = "' + characterName + '"';
-  console.log(statement);
-  await env.DB.prepare(statement).run();
+  console.log(statement, values);
+
+  await env.DB.prepare(statement)
+    .bind(...values)
+    .run();
 }
 
 async function saveUpdateForSkillModifiers(updates, env, characterName) {
-  Object.keys(updates).forEach(async function (key, index) {
-    let statement =
-      'UPDATE SkillModifiers SET Modifier = ' +
-      updates[key] +
-      " WHERE PlayerName = '" +
-      characterName +
-      "' AND Skill = '" +
-      key +
-      "'";
-    console.log(statement);
-    await env.DB.prepare(statement).run();
-  });
+  for (const key of Object.keys(updates)) {
+    const statement = `UPDATE SkillModifiers SET Modifier = ? WHERE PlayerName = ? AND Skill = ?`;
+    const values = [updates[key], characterName, key];
+
+    console.log(statement, values);
+
+    await env.DB.prepare(statement)
+      .bind(...values)
+      .run();
+  }
 }
