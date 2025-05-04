@@ -31,7 +31,7 @@ async function saveUpdateForLists(updates, env, characterName) {
       .bind(characterName)
       .all();
 
-    const existingItems = results.map((row) => row.Item);
+    const existingItems = results.map((row) => row[columnName]);
     console.log('EXISTING ITEMS for ' + key + ': ' + existingItems);
     // 2. Filter out items that already exist
     const itemsToInsert = newItems.filter(
@@ -48,6 +48,20 @@ async function saveUpdateForLists(updates, env, characterName) {
     for (const item of itemsToInsert) {
       await env.DB.prepare(
         `INSERT INTO ${table} (PlayerName, ${columnName}) VALUES (?, ?)`,
+      )
+        .bind(characterName, item)
+        .run();
+    }
+
+    // 4. Filter out items that should no longer exist
+    const itemsToDelete = existingItems.filter(
+      (item) => !newItems.includes(item),
+    );
+
+    // 5. Delete removed items
+    for (const item of itemsToDelete) {
+      await env.DB.prepare(
+        `DELETE FROM ${table} WHERE PlayerName = ? AND ${columnName}) = ?`,
       )
         .bind(characterName, item)
         .run();
