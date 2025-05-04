@@ -57,6 +57,7 @@ async function saveUpdateForLists(updates, env, characterName) {
     const itemsToDelete = existingItems.filter(
       (item) => !newItems.includes(item),
     );
+    console.log('Items that need to be deleted: ' + itemsToDelete);
 
     // 5. Delete removed items
     for (const item of itemsToDelete) {
