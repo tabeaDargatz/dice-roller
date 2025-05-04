@@ -62,7 +62,7 @@ async function saveUpdateForLists(updates, env, characterName) {
     // 5. Delete removed items
     for (const item of itemsToDelete) {
       await env.DB.prepare(
-        `DELETE FROM ${table} WHERE PlayerName = ? AND ${columnName}) = ?`,
+        `DELETE FROM ${table} WHERE PlayerName = ? AND ${columnName} = ?`,
       )
         .bind(characterName, item)
         .run();
