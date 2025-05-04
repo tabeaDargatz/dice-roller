@@ -1,4 +1,9 @@
-const lists = ['Tools', 'Proficiencies', 'Languages', 'InventoryItems'];
+const lists = new Map(
+  ['Tools', 'Tool'],
+  ['Proficiencies', 'Proficiency'],
+  ['Languages', 'Language'],
+  ['InventoryItems', 'Item'],
+);
 
 export async function saveEdit(updates, characterName, env) {
   saveUpdateForCharacterDetails(
@@ -12,10 +17,10 @@ export async function saveEdit(updates, characterName, env) {
 }
 
 async function saveUpdateForLists(updates, env, characterName) {
-  console.log('Trying to save updates for lists:' + lists);
-  for (const listName of lists) {
-    const table = listName;
-    const newItems = updates[listName];
+  for (const [value, key] of lists) {
+    const table = key;
+    const columnName = value;
+    const newItems = updates[key];
 
     console.log('items from frontend: ' + newItems);
     // 1. Get existing items from DB
@@ -26,17 +31,22 @@ async function saveUpdateForLists(updates, env, characterName) {
       .all();
 
     const existingItems = results.map((row) => row.Item);
-    console.log('EXISTING ITEMS for ' + listName + ': ' + existingItems);
+    console.log('EXISTING ITEMS for ' + key + ': ' + existingItems);
     // 2. Filter out items that already exist
     const itemsToInsert = newItems.filter(
       (item) => !existingItems.includes(item),
     );
 
-    console.log('Items that need to be inserted: ' + itemsToInsert);
+    console.log(
+      'Items that need to be inserted into ' +
+        columnName +
+        ': ' +
+        itemsToInsert,
+    );
     // 3. Insert new items only
     for (const item of itemsToInsert) {
       await env.DB.prepare(
-        `INSERT INTO ${table} (PlayerName, Item) VALUES (?, ?)`,
+        `INSERT INTO ${table} (PlayerName, ${columnName}) VALUES (?, ?)`,
       )
         .bind(characterName, item)
         .run();
