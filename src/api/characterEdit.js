@@ -1,9 +1,9 @@
-const lists = new Map(
+const lists = new Map([
   ['Tools', 'Tool'],
   ['Proficiencies', 'Proficiency'],
   ['Languages', 'Language'],
   ['InventoryItems', 'Item'],
-);
+]);
 
 export async function saveEdit(updates, characterName, env) {
   saveUpdateForCharacterDetails(
