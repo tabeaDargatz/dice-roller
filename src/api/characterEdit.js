@@ -12,12 +12,12 @@ export async function saveEdit(updates, characterName, env) {
 }
 
 async function saveUpdateForLists(updates, env, characterName) {
-  console.log('Trying to save updates for lists:');
-  console.log(lists);
+  console.log('Trying to save updates for lists:' + lists);
   for (const listName of lists) {
     const table = listName;
     const newItems = updates[listName];
 
+    console.log('items from frontend: ' + newItems);
     // 1. Get existing items from DB
     const { results } = await env.DB.prepare(
       `SELECT Item FROM ${table} WHERE PlayerName = ?`,
@@ -26,12 +26,13 @@ async function saveUpdateForLists(updates, env, characterName) {
       .all();
 
     const existingItems = results.map((row) => row.Item);
-
+    console.log('EXISTING ITEMS for ' + listName + ': ' + existingItems);
     // 2. Filter out items that already exist
     const itemsToInsert = newItems.filter(
       (item) => !existingItems.includes(item),
     );
 
+    console.log('Items that need to be inserted: ' + itemsToInsert);
     // 3. Insert new items only
     for (const item of itemsToInsert) {
       await env.DB.prepare(
