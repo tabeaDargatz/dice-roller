@@ -20,7 +20,7 @@ async function saveUpdateForLists(updates, env, characterName) {
     console.log('items from frontend: ' + newItems);
     // 1. Get existing items from DB
     const { results } = await env.DB.prepare(
-      `SELECT Item FROM ${table} WHERE PlayerName = ?`,
+      `SELECT * FROM ${table} WHERE PlayerName = ?`,
     )
       .bind(characterName)
       .all();
