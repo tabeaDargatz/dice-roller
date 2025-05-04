@@ -12,6 +12,8 @@ export async function saveEdit(updates, characterName, env) {
 }
 
 async function saveUpdateForLists(updates, env, characterName) {
+  console.log('Trying to save updates for lists:');
+  console.log(lists);
   for (const listName of lists) {
     const table = listName;
     const newItems = updates[listName];
