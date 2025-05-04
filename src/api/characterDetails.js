@@ -15,7 +15,7 @@ export async function getDetails(characterName, env) {
   );
   characterDetails['Spells'] = await getSpells(characterName, env);
   characterDetails['Skills'] = await getSkills(characterName, env);
-  characterDetails['Inventory'] = await getInventory(characterName, env);
+  characterDetails['InventoryItems'] = await getInventory(characterName, env);
   characterDetails['PictureUrl'] = getThumbnail(characterName);
   return characterDetails;
 }
