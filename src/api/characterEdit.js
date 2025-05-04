@@ -1,3 +1,5 @@
+const lists = ['Tools', 'Proficiencies', 'Languages', 'InventoryItems'];
+
 export async function saveEdit(updates, characterName, env) {
   saveUpdateForCharacterDetails(
     updates['characterDetails'],
@@ -6,6 +8,37 @@ export async function saveEdit(updates, characterName, env) {
   );
 
   saveUpdateForSkillModifiers(updates['skillModifiers'], env, characterName);
+  saveUpdateForLists(updates, env, characterName);
+}
+
+async function saveUpdateForLists(updates, env, characterName) {
+  for (const listName of lists) {
+    const table = listName;
+    const newItems = updates[listName];
+
+    // 1. Get existing items from DB
+    const { results } = await env.DB.prepare(
+      `SELECT Item FROM ${table} WHERE PlayerName = ?`,
+    )
+      .bind(characterName)
+      .all();
+
+    const existingItems = results.map((row) => row.Item);
+
+    // 2. Filter out items that already exist
+    const itemsToInsert = newItems.filter(
+      (item) => !existingItems.includes(item),
+    );
+
+    // 3. Insert new items only
+    for (const item of itemsToInsert) {
+      await env.DB.prepare(
+        `INSERT INTO ${table} (PlayerName, Item) VALUES (?, ?)`,
+      )
+        .bind(characterName, item)
+        .run();
+    }
+  }
 }
 
 async function saveUpdateForCharacterDetails(updates, env, characterName) {
